@@ -3,14 +3,14 @@
 # ============================================================
 
 # Librerie principali
-import numpy as np
-import pandas as pd
-import plotly.express as px
+import numpy as np                  # Useremo numpy per la gestione di alcuni dati numerici
+import pandas as pd                 # Useremo pandas per la gestione del dataframe in cui inseriremo le diverse ipotesi di dato
+import plotly.express as px         # Le funzioni di plotly ci serviranno per graficare i dati all'interno del nostro datagframe
 import plotly.graph_objects as go
 
 
 # ============================================================
-# 1. PARAMETRI DEL PROBLEMA
+# COSTANTI DEL PROBLEMA
 # ============================================================
 
 # Numero totale di figurine dell'album
@@ -25,44 +25,32 @@ COSTO_BUSTINA = 1.50
 # Costo di una figurina singola mancante
 COSTO_FIGURINA_SINGOLA = 0.50
 
+# Costo fisso dell'album
+COSTO_ALBUM = 4.50
 
 # ============================================================
-# 2. FUNZIONE PER STIMARE LE FIGURINE MANCANTI
+# FUNZIONI PER CALCOLARE FIGURINE ATTESE, MANCANTI E COSTO TOTALE                
 # ============================================================
+
+# Questa funzione calcola quante figurine mancano in media dopo aver comprato un numero n di bustine (il nostro parametro "numero_bustine").
+# Se ogni bustina contiene 7 figurine, dopo aver comprato n bustine avremo 7*n figurine.
+# Dopo aver estratto 7*n figurine, la probabilità che una specifica figurina non sia ancora uscita è:
+#                           (1 - 1/Numero totale di figurine)^(7*n)
+# Quindi il numero di di figurine ancora mancanti è: 
+#                           Num tot figurine * (1 - 1/Numero totale di figurine)^(7*n)   
 
 def figurine_mancanti_attese(numero_bustine):
-    """
-    Calcola quante figurine mancano in media dopo aver comprato
-    un certo numero di bustine.
 
-    Idea:
-    Ogni bustina contiene 7 figurine.
-    Dopo b bustine, abbiamo estratto 7*b figurine.
-
-    La probabilità che una specifica figurina NON sia mai uscita
-    dopo 7*b estrazioni è circa:
-
-        (1 - 1/N)^(7*b)
-
-    Quindi il numero atteso di figurine ancora mancanti è:
-
-        N * (1 - 1/N)^(7*b)
-
-    Questa è una buona approssimazione del problema.
-    """
-
+    # se per esempio abbiamo già 10 bustine, la nostra variabile "estrazioni_totali" sarà = a 70
     estrazioni_totali = numero_bustine * FIGURINE_PER_BUSTINA
 
     mancanti = N_FIGURINE * (1 - 1 / N_FIGURINE) ** estrazioni_totali
 
     return mancanti
 
+# Questa funzione, sulla base del risultato della precedente, ci dice quante figurine dovremmo già avere 
 
 def figurine_diverse_attese(numero_bustine):
-    """
-    Calcola quante figurine diverse ci aspettiamo di avere
-    dopo un certo numero di bustine.
-    """
 
     mancanti = figurine_mancanti_attese(numero_bustine)
 
@@ -70,32 +58,27 @@ def figurine_diverse_attese(numero_bustine):
 
     return diverse
 
+# Questa funzione rappresenta un po' il clou del problema: quando mi conviene fermarmi dal comprare bustine ed acquistarle quindi singolarmente?
+# All'interno del mio dataframe, simulerò in ogni riga, progressivamente l'acquisto di un numero n di bustine.
+# Sulla base delle n bustine che acquisto, posso quindi calcolare quanto sarà il costo della parte "bustine" e quale della parte delle singole figurine specifiche
 
 def costo_totale_atteso(numero_bustine):
-    """
-    Calcola il costo totale atteso della strategia:
 
-    1. compro un certo numero di bustine
-    2. poi compro singolarmente tutte le figurine mancanti
+    # Qui daremo, riga per riga, il numero di bustine acquistate. Tramite la prima funzione ci dirà quante figurine otterremo da quelle bustine
+    costo_bustine = numero_bustine * COSTO_BUSTINA 
 
-    Costo totale =
-        costo bustine +
-        costo figurine mancanti singole
-    """
-
-    costo_bustine = numero_bustine * COSTO_BUSTINA
-
+    # Calcoliamo quante figurine mancano dopo l'acquisto di n bustine.
     mancanti = figurine_mancanti_attese(numero_bustine)
 
     costo_singole = mancanti * COSTO_FIGURINA_SINGOLA
 
-    totale = costo_bustine + costo_singole
+    totale = costo_bustine + costo_singole + COSTO_ALBUM # si aggiunge infine il costo fisso dell'album
 
     return totale
 
 
 # ============================================================
-# 3. CREAZIONE DELLA TABELLA DATI
+# CREAZIONE DELLA TABELLA DATI
 # ============================================================
 
 # Decidiamo fino a quante bustine simulare/calcolare.
