@@ -137,10 +137,11 @@ df_interessante = df[df["Bustine"].isin([0, 50, 80, 100, 110, 119, 120, 130, 140
 print(df_interessante)
 
 # ============================================================
-# 5. GRAFICO DEL COSTO TOTALE ATTESO
+# GRAFICO DEL COSTO TOTALE ATTESO
 # ============================================================
 
-fig = px.line(
+# La funzione .line di Plotly Express serve per creare grafici a linee interattivi.
+fig = px.line( 
     df,
     x="Bustine",
     y="Costo totale atteso",
@@ -152,7 +153,7 @@ fig = px.line(
     markers=False
 )
 
-# Aggiungiamo il punto minimo
+# Aggiungiamo il punto minimo usando go (Graph Objects) di Plotly
 fig.add_trace(
     go.Scatter(
         x=[bustine_ottime],
@@ -173,10 +174,13 @@ fig.add_vline(
     annotation_position="top left"
 )
 
+# La funzione show() ci mostra il grafico. La libreria di Plotly fa il render del grafico automaticamente attraverso il browser.
 fig.show()
 
 # ============================================================
-# 6. GRAFICO FIGURINE DIVERSE / MANCANTI
+# GRAFICO FIGURINE DIVERSE / MANCANTI
+# In maniera simile a prima creiamo un'altro grafico.
+# Questa volta però il grafico rappresenta il costo delle bustine e quello delle figurine singole all'aumentare del numero n di bustine acquistate.
 # ============================================================
 
 fig = go.Figure()
@@ -216,7 +220,8 @@ fig.update_layout(
 fig.show()
 
 # ============================================================
-# 7. GRAFICO DELLE COMPONENTI DI COSTO
+# GRAFICO DELLE COMPONENTI DI COSTO
+# Grafico riassuntivo di costi bustine, figurine singole e strategia ottima.
 # ============================================================
 
 fig = go.Figure()
