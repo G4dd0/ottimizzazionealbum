@@ -14,3 +14,9 @@ Partendo da questi dati ho sviluppato un programma che facesse una stima di qual
 Con un veloce calcolo uno potrebbe arrivare alla soluzione che, trovando sempre e solo figurine tra loro diverse e senza mai ripetizioni, l'album si potrebbe completare spendendo circa 215€.
 
 Ma nella realtà bisogna considerare anche le possibili ripetizioni.
+
+![Grafico delle strategie](Fig.%201%20-%20Costo%20totale%20atteso.png)
+
+![Grafico dei costi delle bustine e delle singole figurine](Fig.%202%20-%20Andamento%20figurine%20diverse%20e%20mancanti.png)
+
+![Grafico riassuntivo](Fig.%203%20-%20Costo%20bustine,%20costo%20singole%20e%20costo%20totale.png)
