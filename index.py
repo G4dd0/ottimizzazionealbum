@@ -85,14 +85,16 @@ def costo_totale_atteso(numero_bustine):
 # 300 è più che sufficiente per vedere bene il minimo.
 max_bustine = 300
 
-# Lista dei possibili numeri di bustine
+# Con la funzione "arange" creiamo una lista di tutti i numeri interi da 0 al max_bustine + 1 e la salviamo in "bustine"
 bustine = np.arange(0, max_bustine + 1)
 
-# Creiamo una tabella con tutti i valori calcolati
+# Creiamo il nostro dataframe, ovvero la tabella con tutti i valori calcolati, ognuno in base al numero di bustine di quella riga
+# Il dataframe sarà strutturato così:
+# Bustine   |   Costo bustine   |   Figurine diverse attese    | Figurine mancanti attese | Costo singole mancanti | Costo totale atteso
 df = pd.DataFrame({
     "Bustine": bustine,
     "Costo bustine": bustine * COSTO_BUSTINA,
-    "Figurine diverse attese": [figurine_diverse_attese(b) for b in bustine],
+    "Figurine diverse attese": [figurine_diverse_attese(b) for b in bustine],   # per esempio qui scorriamo ogni valore della lista "bustine" per calcolare quante figurine diverse abbiamo trovato con n bustine
     "Figurine mancanti attese": [figurine_mancanti_attese(b) for b in bustine],
     "Costo singole mancanti": [figurine_mancanti_attese(b) * COSTO_FIGURINA_SINGOLA for b in bustine],
     "Costo totale atteso": [costo_totale_atteso(b) for b in bustine]
@@ -107,12 +109,14 @@ df["Costo totale atteso"] = df["Costo totale atteso"].round(2)
 
 
 # ============================================================
-# 4. TROVIAMO LA STRATEGIA MIGLIORE
+# TROVIAMO LA STRATEGIA MIGLIORE
 # ============================================================
 
 # Troviamo la riga con costo totale minimo
-riga_ottima = df.loc[df["Costo totale atteso"].idxmin()]
+# NB: la funzione "loc[]" di pandas serve per estrarre una colonna/riga in base alla sua label
+riga_ottima = df.loc[df["Costo totale atteso"].idxmin()] # idxmin va a prendere la riga con valore minore
 
+# In base alla riga ottima che abbiamo ottenuto estraiamo anche i dati delle altre colonne di quella riga (n bustine, costo, ecc.)
 bustine_ottime = int(riga_ottima["Bustine"])
 costo_minimo = riga_ottima["Costo totale atteso"]
 mancanti_al_minimo = riga_ottima["Figurine mancanti attese"]
