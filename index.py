@@ -271,31 +271,24 @@ fig.update_layout(
 fig.show()
 
 # ============================================================
-# 8. SIMULAZIONE MONTE CARLO
+# SIMULAZIONE MONTE CARLO
 # ============================================================
 
 import random
 
+# Con il metodo Monte Carlo andiamo a simulare l'acquisto di n bustine --> Ogni bustina contiene 7 figurine casuali diverse.
+# Questa funzione alla fine restituisce quante figurine diverse abbiamo trovato aprendo n bustine, quante ne mancano e qual'è il costo totale della strategia.
 
 def simula_album(numero_bustine):
-    """
-    Simula l'acquisto di un certo numero di bustine.
-
-    Ogni bustina contiene 7 figurine casuali diverse.
-    Alla fine restituisce:
-    - numero di figurine diverse trovate
-    - numero di figurine mancanti
-    - costo totale della strategia
-    """
-
+   
     # Insieme delle figurine trovate.
-    # Usiamo un set perché elimina automaticamente i duplicati.
+    # NB: Usiamo un set per raccogliere le figurine perché elimina automaticamente i duplicati.
     figurine_trovate = set()
 
     # Simuliamo l'apertura delle bustine
     for _ in range(numero_bustine):
 
-        # Estraiamo 7 figurine diverse da un album di 980
+        # Estraiamo 7 figurine diverse da un album di 980 assegnando ad ogni figurina un numero intero invece che il nome/squadra/altro
         bustina = random.sample(range(1, N_FIGURINE + 1), FIGURINE_PER_BUSTINA)
 
         # Aggiungiamo le figurine trovate al set
@@ -316,15 +309,9 @@ def simula_album(numero_bustine):
 
     return diverse, mancanti, costo
 
-
+# Questa funzione invece simula il metodo Monte Carlo per un numero di volte pari a quello riportato nel parametro "numero_simulazioni"
+# Calcoliamo poi la media di figurine diverse trovate, media delle figurine mancanti e media del costo totale oltre che la deviazione standard del costo.
 def monte_carlo(numero_bustine, numero_simulazioni=1000):
-    """
-    Ripete la simulazione tante volte per stimare:
-    - media delle figurine diverse
-    - media delle figurine mancanti
-    - media del costo totale
-    - deviazione standard del costo
-    """
 
     risultati = []
 
@@ -338,18 +325,20 @@ def monte_carlo(numero_bustine, numero_simulazioni=1000):
             "Costo totale": costo
         })
 
+    # Infine restituisce il Dataframe con le simulazioni per il numero di bustine passato come parametro (noi proveremo il numero ottimale di prima)
     return pd.DataFrame(risultati)
 
 
-# Proviamo la simulazione sul numero ottimale teorico
+# Proviamo la simulazione sul numero ottimale teorico ottenuto prima
 simulazioni_ottimo = monte_carlo(bustine_ottime, numero_simulazioni=5000)
 
 print(simulazioni_ottimo.describe())
 
 # ============================================================
-# 9. ISTOGRAMMA DEI COSTI SIMULATI
+# ISTOGRAMMA DEI COSTI SIMULATI
 # ============================================================
 
+# Istogramma dei costi simulati attraverso il metodo Monte Carlo
 fig = px.histogram(
     simulazioni_ottimo,
     x="Costo totale",
