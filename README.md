@@ -20,3 +20,5 @@ Ma nella realtà bisogna considerare anche le possibili ripetizioni.
 ![Grafico dei costi delle bustine e delle singole figurine](Fig.%202%20-%20Andamento%20figurine%20diverse%20e%20mancanti.png)
 
 ![Grafico riassuntivo](Fig.%203%20-%20Costo%20bustine,%20costo%20singole%20e%20costo%20totale.png)
+
+![Grafico simulazione Monte Carlo](Fig.%204%20-%20Simulazione%20Monte%20Carlo.png)
